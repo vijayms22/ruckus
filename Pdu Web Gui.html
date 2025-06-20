@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>PDU Power Control</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f5f5f5;
+      padding: 2rem;
+    }
+    .container {
+      max-width: 600px;
+      margin: auto;
+      background: white;
+      padding: 2rem;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    h2 {
+      text-align: center;
+    }
+    label {
+      display: block;
+      margin: 1rem 0 0.3rem;
+    }
+    input, select, button {
+      width: 100%;
+      padding: 0.5rem;
+      margin-bottom: 1rem;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+    button {
+      background-color: #007bff;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+    .result {
+      font-weight: bold;
+      margin-top: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Intelligent PDU Power Control</h2>
+    <label for="ip">PDU IP Address</label>
+    <input type="text" id="ip" placeholder="e.g., 10.177.29.30" />
+
+    <label for="outlet">Outlet Number</label>
+    <input type="number" id="outlet" placeholder="e.g., 2" />
+
+    <label for="action">Action</label>
+    <select id="action">
+      <option value="on">ON</option>
+      <option value="off">OFF</option>
+      <option value="cycle">CYCLE</option>
+    </select>
+
+    <label for="username">Username</label>
+    <input type="text" id="username" placeholder="e.g., user" />
+
+    <label for="password">Password</label>
+    <input type="password" id="password" />
+
+    <button onclick="submitControl()">Submit</button>
+    <div class="result" id="result"></div>
+  </div>
+
+  <script>
+    async function submitControl() {
+      const ip = document.getElementById('ip').value;
+      const outlet = document.getElementById('outlet').value;
+      const action = document.getElementById('action').value;
+      const username = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
+      const result = document.getElementById('result');
+
+      if (!ip || !outlet || !action || !username || !password) {
+        result.style.color = 'red';
+        result.textContent = 'Please fill in all fields.';
+        return;
+      }
+
+      try {
+        const response = await fetch('http://localhost:5000/control', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ ip, outlet, action, username, password })
+        });
+
+        const data = await response.json();
+        result.style.color = data.status === 'success' ? 'green' : 'red';
+        result.textContent = data.message;
+      } catch (err) {
+        result.style.color = 'red';
+        result.textContent = 'Error: ' + err.message;
+      }
+    }
+  </script>
+</body>
+</html>
