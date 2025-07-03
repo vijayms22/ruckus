@@ -16,8 +16,10 @@ def control_pdu():
     ip = data['ip']
     outlet = data['outlet']
     action = data['action']
-    username = data['username']
-    password = data['password']
+
+    # Hardcoded credentials (only in backend)
+    username = 'user'
+    password = 'pass'
 
     try:
         ssh = paramiko.SSHClient()
@@ -25,15 +27,13 @@ def control_pdu():
         ssh.connect(ip, username=username, password=password, timeout=10)
 
         shell = ssh.invoke_shell()
-        time.sleep(2)
+        time.sleep(3)
         shell.recv(1000)
 
-        # Send action command
         shell.send(f'power outlets {outlet} {action}\n')
         time.sleep(1)
         output = shell.recv(3000).decode()
 
-        # Confirm with 'y' if prompted
         if "Do you wish" in output or "[y/n]" in output:
             shell.send("y\n")
             time.sleep(2)
@@ -41,7 +41,7 @@ def control_pdu():
 
         ssh.close()
 
-        # 🔽 Print SSH output to console
+        # Print SSH output in terminal for debugging
         print(f"\n--- SSH Output for {ip}, outlet {outlet}, action {action} ---")
         print(output)
         print("-------------------------------------------------------------\n")
@@ -51,7 +51,6 @@ def control_pdu():
     except Exception as e:
         print(f"❌ Error during SSH session: {e}")
         return jsonify({'status': 'error', 'message': str(e)})
-
 
 if __name__ == "__main__":
     app.run(debug=True)

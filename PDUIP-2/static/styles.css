@@ -1,0 +1,56 @@
+/* Full screen background with data center image and dark overlay */
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #fff;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: 
+    linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)),
+    url('https://engineering.fb.com/wp-content/uploads/2018/05/data-center-shot.jpg') no-repeat center center fixed;
+  background-size: cover;
+}
+
+/* Card styling with semi-transparent white background */
+.card {
+  border-radius: 1rem;
+  background-color: rgba(255, 255, 255, 0.9);
+  color: #333;
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.2);
+  max-width: 600px;
+  width: 100%;
+  padding: 2rem;
+}
+
+/* Heading styling */
+h2 {
+  font-weight: 700;
+  color: #007bff;
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+/* Status messages */
+#status ul {
+  max-height: 300px;
+  overflow-y: auto;
+  margin-top: 1rem;
+  color: #333;
+}
+
+#status li {
+  font-weight: 500;
+}
+
+#status .list-group-item-success {
+  background-color: #d4edda !important;
+  color: #155724 !important;
+}
+
+#status .list-group-item-danger {
+  background-color: #f8d7da !important;
+  color: #721c24 !important;
+}
